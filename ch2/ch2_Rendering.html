@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body onload="initBuffers()">
+    <!-- 默认宽高是300*150 -->
+    <canvas id="canvas" width="400" height="300">
+        Your browser does not support HTML5
+    </canvas>
+    <script>
+        const canvas = document.createElement('canvas');
+        document.querySelector('body').appendChild(canvas);
+        const gl = canvas.getContext('webgl');
+        //顶点缓冲对象（VBO）
+        let coneVBO = null;
+        //索引缓冲对象（IBO）
+        let coneIBO = null;
+        function initBuffers() {
+            //顶点数组
+            let vertices = [];
+            //索引数组
+            let indices = [];
+            //顶点数据
+            vertices = [1.5, 0, 0,
+                -1.5, 1, 0,
+                -1.5, 0.809017, 0.587785,
+                -1.5, 0.309017, 0.951057,
+                -1.5, -0.309017, 0.951057,
+                -1.5, -0.809017, 0.587785,
+                -1.5, -1, 0.0,
+                -1.5, -0.809017, -0.587785,
+                -1.5, -0.309017, -0.951057,
+                -1.5, 0.309017, -0.951057,
+                -1.5, 0.809017, -0.587785];
+            //索引数据
+            indices = [0, 1, 2,
+                0, 2, 3,
+                0, 3, 4,
+                0, 4, 5,
+                0, 5, 6,
+                0, 6, 7,
+                0, 7, 8,
+                0, 8, 9,
+                0, 9, 10,
+                0, 10, 1];
+            //创建buffer对象
+            coneVBO = gl.createBuffer();
+            /* 将对象和webgl缓冲区进行绑定
+            如果是顶点数据，则绑定ARRAY_BUFFER
+            如果是索引数据，则绑定ELEMENT_ARRAY_BUFFER */
+            gl.bindBuffer(gl.ARRAY_BUFFER, coneVBO);
+            //将数组转换成二进制数据，提升性能
+            //这里需要注意的是，顶点坐标是可以为浮点数的，而索引一般都是整数
+            //最后一个参数是指定数据渲染模式
+            //STATIC_DRAW:定义一次使用多次
+            //DYNAMIC_DRAW:定义多次，使用多次
+            //STREAM_DRAW:定义一次，使用一次
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+            //将缓冲区释放
+            gl.bindBuffer(gl.ARRAY_BUFFER,null);
+            coneIBO = gl.createBuffer();
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,coneIBO);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(indices),gl.STATIC_DRAW);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,null);
+
+        }
+    </script>
+</body>
+
+</html>
